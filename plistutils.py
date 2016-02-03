@@ -21,7 +21,7 @@ def readDict(dictNode):
 	
 	# check if it really is a dict node
 	if (dictNode.localName != "dict"):
-		print("Node under test is not a dict (it is more likely a \"%s\")."%node.localName)
+		print(("Node under test is not a dict (it is more likely a \"%s\")."%node.localName))
 		return ritorno
 	
 	nodeKey = None
@@ -48,7 +48,7 @@ def readArray(arrayNode):
 	
 	# check if it really is a dict node
 	if (arrayNode.localName != "array"):
-		print("Node under test is not an array (it is more likely a \"%s\")."%node.localName)
+		print(("Node under test is not an array (it is more likely a \"%s\")."%node.localName))
 		return ritorno
 	
 	for node in arrayNode.childNodes:
@@ -78,7 +78,7 @@ def readPlist(fileName):
 			plist = biplist.readPlist(fileName)		
 				
 	except:
-		print "Unexpected error:", sys.exc_info()
+		print("Unexpected error:", sys.exc_info())
 		return None
 	
 	return plist
@@ -94,7 +94,7 @@ def readPlistToXml(filename):
 	try:
 		retval = os.system(command)	
 	except:
-		print "Unexpected error while running command: \"%s\""%command, sys.exc_info()[1]
+		print("Unexpected error while running command: \"%s\""%command, sys.exc_info()[1])
 		return None
 	
 	if (retval != 0):
@@ -105,7 +105,7 @@ def readPlistToXml(filename):
 	try:
 		xmldata = parse(tempfile)
 	except:
-		print "Unexpected error while parsing XML data:", sys.exc_info()[1]
+		print("Unexpected error while parsing XML data:", sys.exc_info()[1])
 		return None
 	
 	os.remove(tempfile)
@@ -137,7 +137,7 @@ def deviceInfo(infoPlist_file, ):
 	
 	properties = {}
 	
-	for key in infoPlist.keys():
+	for key in list(infoPlist.keys()):
 		if (key in proplist):
 			properties[key] = infoPlist[key]
 

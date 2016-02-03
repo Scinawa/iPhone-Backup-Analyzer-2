@@ -2,6 +2,11 @@ DEBIAN_PACKAGES=python-dev \
 		python-qt4 python-qt4-dev python-qt4-doc \
 		python-pyside pyside-tools
 
+#python3
+python3-pyside
+
+
+
 # These are the input UI (XML) files
 UI_FILES=about_window.ui \
 	hex_widget.ui \

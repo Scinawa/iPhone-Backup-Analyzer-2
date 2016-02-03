@@ -108,7 +108,7 @@ class PlistWidget(QtGui.QWidget):
             self.parseNode(plist, None)
 
         except:
-            print
+            print()
             "Unexpected error:", sys.exc_info()
 
     def parseNode(self, newNode, parentNode):
@@ -263,7 +263,7 @@ class HexWidget(QtGui.QWidget):
             fh.close()
 
         except:
-            print
+            print()
             "Unexpected error:", sys.exc_info()
 
         self.ui.hexTable.resizeColumnsToContents()
@@ -324,7 +324,7 @@ class ImageWidget(QtGui.QWidget):
             self.ui.exifTable.setRowCount(len(info))
 
             row = 0
-            for tag, value in info.items():
+            for tag, value in list(info.items()):
                 decoded = TAGS.get(tag, tag)
 
                 newItem = QtGui.QTableWidgetItem(str(tag))
@@ -427,7 +427,7 @@ class SqliteWidget(QtGui.QWidget):
             tempdb.close()
 
         except:
-            print("\nUnexpected error: %s" % sys.exc_info()[1])
+            print(("\nUnexpected error: %s" % sys.exc_info()[1]))
             self.close()
 
     def setTitle(self, title):
@@ -559,7 +559,7 @@ class SqliteWidget(QtGui.QWidget):
                     rowIndex = rowIndex + 1
 
             except:
-                print("Unexpected error:", sys.exc_info())
+                print(("Unexpected error:", sys.exc_info()))
 
             seltabledb.close()
             self.ui.tableContent.resizeColumnsToContents()
@@ -725,7 +725,7 @@ class IPBA2(QtGui.QMainWindow):
         self.pluginsList = []
 
         pluginsdir = os.path.join(os.path.dirname(__file__), pluginsPackage)
-        print("Loading plugins from dir: %s" % pluginsdir)
+        print(("Loading plugins from dir: %s" % pluginsdir))
 
         for module in os.listdir(pluginsdir):
             if module[-3:] != '.py' or module[0:4] != "plg_":
@@ -743,10 +743,10 @@ class IPBA2(QtGui.QMainWindow):
             # check whether module has PLUGIN_NAME() method (optional)
             try:
                 moddescr = getattr(sys.modules[modname], "PLUGIN_NAME")
-                print("Loading plugin: %s - %s..." % (modname, moddescr))
+                print(("Loading plugin: %s - %s..." % (modname, moddescr)))
             except:
-                print("Loading plugin: %s - (name not available)..." % modname)
-                print(sys.exc_info())
+                print(("Loading plugin: %s - (name not available)..." % modname))
+                print((sys.exc_info()))
                 moddescr = modname
 
             # check whether module has main() method
@@ -778,7 +778,7 @@ class IPBA2(QtGui.QMainWindow):
                 print("- report")
 
             if (hasReport == False and hasMain == False):
-                print("- Error: plugin %s has no useful method." % (modname))
+                print(("- Error: plugin %s has no useful method." % (modname)))
                 continue
 
     def runPlugin(self, modname):
@@ -1217,7 +1217,7 @@ class IPBA2(QtGui.QMainWindow):
 
         if os.name == 'nt':
 
-            print
+            print()
             "Checking SQLite files integrity (windows only)..."
 
             zipfilename = os.path.join(self.backup_path, 'original_files.zip')
@@ -1278,7 +1278,7 @@ class IPBA2(QtGui.QMainWindow):
                 progress.show()
                 QtGui.QApplication.processEvents()
 
-                print
+                print()
                 '\nRepairing the databases ... '
                 zf = zipfile.ZipFile(zipfilename, mode='w')
 
@@ -1287,7 +1287,7 @@ class IPBA2(QtGui.QMainWindow):
                     fname = sqliteFile[0]
                     item_realpath = sqliteFile[1]
 
-                    print("Repairing database: %s" % fname)
+                    print(("Repairing database: %s" % fname))
 
                     # dump the database in an SQL text format (Temp.sql temporary file)
                     os.system(
@@ -1431,8 +1431,8 @@ class IPBA2(QtGui.QMainWindow):
                     "<strong>File type: </strong>" + filemagic)
 
             else:
-                print(
-                    "...troubles while opening file %s (does not exist)" % item_realpath)
+                print((
+                    "...troubles while opening file %s (does not exist)" % item_realpath))
 
             return
 
@@ -1550,9 +1550,9 @@ class IPBA2(QtGui.QMainWindow):
         elif (os.path.exists(mbdbPath)):
             mbdb = mbdbdecoding.process_mbdb_file(mbdbPath)
         else:
-            print(
+            print((
                 "\nManifest.mbdb/Manifest.mbdx not found in path \"%s\". Are you sure this is a correct iOS backup dir?\n" % (
-                self.backup_path))
+                self.backup_path)))
             sys.exit(1)
 
         # prepares DB
@@ -1594,7 +1594,7 @@ class IPBA2(QtGui.QMainWindow):
 
         # starts progress window
         progress = QtGui.QProgressDialog("Reading backup...", "Abort", 0,
-                                         2 * len(mbdb.items()) / 10, self)
+                                         2 * len(list(mbdb.items())) / 10, self)
         progress.setWindowModality(QtCore.Qt.WindowModal)
         progress.setMinimumDuration(0)
         progress.setCancelButton(None)
@@ -1605,7 +1605,7 @@ class IPBA2(QtGui.QMainWindow):
         items = 0;
 
         # populates database by parsing manifest file
-        for offset, fileinfo in mbdb.items():
+        for offset, fileinfo in list(mbdb.items()):
 
             # iOS 4 (get file ID from mbdx file)
             if (iOSVersion == 4):
@@ -1614,8 +1614,8 @@ class IPBA2(QtGui.QMainWindow):
                     fileinfo['fileID'] = mbdx[offset]
                 else:
                     fileinfo['fileID'] = "<nofileID>"
-                    print >> sys.stderr, "No fileID found for %s" % fileinfo[
-                        'filename']
+                    print("No fileID found for %s" % fileinfo[
+                        'filename'], file=sys.stderr)
 
             # iOS 5 (no MBDX file, use SHA1 of complete file name)
             elif (iOSVersion == 5):
@@ -1677,7 +1677,7 @@ class IPBA2(QtGui.QMainWindow):
 
                     query = "INSERT INTO properties(file_id, property_name, property_val) VALUES (?, ?, ?);"
                     rows = ((index, name, self.hex2nums(val)) for name, val in
-                            properties.items())
+                            list(properties.items()))
                     self.cursor.executemany(query, rows);
 
                 # print("File: %s, properties: %i"%(domain + ":" + filepath + "/" + filename, fileinfo['numprops']))
@@ -1695,8 +1695,8 @@ class IPBA2(QtGui.QMainWindow):
         database.commit()
 
         # print banner
-        print("\nWorking directory: %s" % self.backup_path)
-        print("Read elements: %i" % items)
+        print(("\nWorking directory: %s" % self.backup_path))
+        print(("Read elements: %i" % items))
 
         # add STANDARD files
         standardFiles = QtGui.QTreeWidgetItem(None)
@@ -1804,7 +1804,7 @@ class IPBA2(QtGui.QMainWindow):
             os.path.join(self.backup_path, "Info.plist"))
         device_display_name = "Unknown"
         device_type = "Unknown"
-        for element in deviceinfo.keys():
+        for element in list(deviceinfo.keys()):
             self.ui.backupInfoText.append(
                 "<strong>%s</strong>: %s" % (element, deviceinfo[element]))
             if element == "Display Name":
@@ -1834,7 +1834,7 @@ class IPBA2(QtGui.QMainWindow):
         """
 
         # Remove the path, if it already exists
-        tmp = filter(lambda x: x[0] == path, self.mru_list)
+        tmp = [x for x in self.mru_list if x[0] == path]
         if len(tmp) > 0:
             self.mru_list.remove(tmp[0])
 

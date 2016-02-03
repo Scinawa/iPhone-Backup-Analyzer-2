@@ -99,7 +99,7 @@ def fileinfo_str(f, verbose=False):
     elif (f['mode'] & 0xE000) == 0x8000: type = '-' # file
     elif (f['mode'] & 0xE000) == 0x4000: type = 'd' # dir
     else: 
-        print >> sys.stderr, "Unknown file type %04x for %s" % (f['mode'], fileinfo_str(f, False))
+        print("Unknown file type %04x for %s" % (f['mode'], fileinfo_str(f, False)), file=sys.stderr)
         type = '?' # unknown
     info = ("%s%s %08x %08x %7d %10d %10d %10d (%s)%s::%s" % 
             (type, modestr(f['mode']&0x0FFF) , f['userid'], f['groupid'], f['filelen'], 
@@ -110,7 +110,7 @@ def fileinfo_str(f, verbose=False):
              f['fileID'], f['domain'], f['filename']))
     
     if type == 'l': info = info + ' -> ' + f['linktarget'] # symlink destination
-    for name, value in f['properties'].items(): # extra properties
+    for name, value in list(f['properties'].items()): # extra properties
         info = info + ' ' + name + '=' + repr(value)
     return info
 
@@ -118,10 +118,10 @@ verbose = True
 if __name__ == '__main__':
     mbdb = process_mbdb_file("Manifest.mbdb")
     mbdx = process_mbdx_file("Manifest.mbdx")
-    for offset, fileinfo in mbdb.items():
+    for offset, fileinfo in list(mbdb.items()):
         if offset in mbdx:
             fileinfo['fileID'] = mbdx[offset]
         else:
             fileinfo['fileID'] = "<nofileID>"
-            print >> sys.stderr, "No fileID found for %s" % fileinfo_str(fileinfo)
-        print fileinfo_str(fileinfo, verbose)
+            print("No fileID found for %s" % fileinfo_str(fileinfo), file=sys.stderr)
+        print(fileinfo_str(fileinfo, verbose))
