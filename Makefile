@@ -3,8 +3,8 @@ DEBIAN_PACKAGES=python-dev \
 		python-pyside pyside-tools
 
 #python3
-python3-pyside
-
+#python3-pyside
+#python-qt4-devtools
 
 
 # These are the input UI (XML) files
@@ -15,21 +15,20 @@ UI_FILES=about_window.ui \
 	plist_widget.ui \
 	sqlite_widget.ui \
 	text_widget.ui \
-	ipba2-plugins/addressbook_ui.ui \
-	ipba2-plugins/callhistory_ui.ui \
-	ipba2-plugins/general_ui.ui \
-	ipba2-plugins/knownnetworks_ui.ui \
-	ipba2-plugins/networkident_ui.ui \
-	ipba2-plugins/note_ui.ui \
-	ipba2-plugins/safarihistory_ui.ui \
-	ipba2-plugins/safaristate_ui.ui \
-	ipba2-plugins/safbookmarks_ui.ui \
-	ipba2-plugins/skype_ui.ui \
-	ipba2-plugins/sms_ui.ui \
-	ipba2-plugins/thumbsbrowser_ui.ui \
-	ipba2-plugins/viber_ui.ui \
-	ipba2-plugins/whatsapp_ui.ui
-
+	ipba2plugins/addressbook_ui.ui \
+	ipba2plugins/callhistory_ui.ui \
+	ipba2plugins/general_ui.ui \
+	ipba2plugins/knownnetworks_ui.ui \
+	ipba2plugins/networkident_ui.ui \
+	ipba2plugins/note_ui.ui \
+	ipba2plugins/safarihistory_ui.ui \
+	ipba2plugins/safaristate_ui.ui \
+	ipba2plugins/safbookmarks_ui.ui \
+	ipba2plugins/skype_ui.ui \
+	ipba2plugins/sms_ui.ui \
+	ipba2plugins/thumbsbrowser_ui.ui \
+	ipba2plugins/viber_ui.ui \
+	ipba2plugins/whatsapp_ui.ui
 
 # These are the compiled(generated) output files.
 PY_UI_FILES=$(UI_FILES:.ui=.py)
